@@ -12,7 +12,11 @@ public abstract class AbstractAdventOfCode {
     }
 
     public List<Integer> readInputAsInts(String path) throws Exception {
-        return readInput(path).stream().map(Integer::parseInt).collect(Collectors.toList());
+        return readInputAsInts(path, 10);
+    }
+
+    public List<Integer> readInputAsInts(String path, int radix) throws Exception {
+        return readInput(path).stream().map(i -> Integer.parseInt(i, radix)).collect(Collectors.toList());
     }
 
     public abstract Object solvePartOne() throws Exception;
