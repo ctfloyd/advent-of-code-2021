@@ -32,6 +32,18 @@ public abstract class AbstractAdventOfCode {
         return readInputAsCsvInts(path, 10);
     }
 
+    public int[][] read2dBoard(String path) throws Exception {
+        List<String> lines = readInput(path);
+        int[][] board = new int[lines.size()][lines.get(0).split("").length];
+        for (int i = 0;  i < lines.size(); i++) {
+            String[] nums = lines.get(i).split("");
+            for (int j = 0; j < nums.length; j++) {
+                board[i][j] = Integer.parseInt(nums[j]);
+            }
+        }
+        return board;
+    }
+
     public abstract Object solvePartOne() throws Exception;
     public abstract Object solvePartTwo() throws Exception;
 
