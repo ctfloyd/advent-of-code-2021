@@ -29,7 +29,7 @@ public class DayTwelve extends AbstractAdventOfCode {
             }
         }
 
-        if (!isUppercase(current.getName())) {
+        if (!current.isUpper()) {
             visited.add(current);
         }
 
@@ -41,25 +41,15 @@ public class DayTwelve extends AbstractAdventOfCode {
         return numPaths;
     }
 
-    private boolean isUppercase(String str) {
-        for (int i = 0; i < str.length(); i++) {
-            if(!Character.isUpperCase(str.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     private Node parseInput(List<String> input) {
         HashMap<String, Node> nodes = new HashMap<>();
         for (String line : input) {
             String[] parts = line.split("-");
-            Node left = nodes.getOrDefault(parts[0], new Node(parts[0]));
-            Node right = nodes.getOrDefault(parts[1], new Node(parts[1]));
+            Node left = nodes.computeIfAbsent(parts[0], Node::new);
+            Node right = nodes.computeIfAbsent(parts[1], Node::new);
             left.addNode(right);
             right.addNode(left);
-            nodes.put(parts[0], left);
-            nodes.put(parts[1], right);
         }
         return nodes.get("start");
     }
@@ -84,6 +74,15 @@ public class DayTwelve extends AbstractAdventOfCode {
 
         public List<Node> getNodes() {
             return nodes;
+        }
+
+        public boolean isUpper() {
+            for (int i = 0; i < name.length(); i++) {
+                if(!Character.isUpperCase(name.charAt(i))) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
