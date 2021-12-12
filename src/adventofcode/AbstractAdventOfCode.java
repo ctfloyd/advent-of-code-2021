@@ -49,11 +49,13 @@ public abstract class AbstractAdventOfCode {
 
     public void execute() {
         try {
+            long start = System.currentTimeMillis();
             Object answer = solvePartOne();
-            System.out.println("The answer to part 1 is: " + answer);
+            System.out.println(String.format("(1) %6dms - %s", System.currentTimeMillis() - start, answer));
 
+            start = System.currentTimeMillis();
             answer = solvePartTwo();
-            System.out.println("The answer to part 2 is: " + answer);
+            System.out.println(String.format("(2) %6dms - %s", System.currentTimeMillis() - start, answer));
         } catch (Exception ex) {
             System.err.println("An error occurred while solving advent of code problem!");
             ex.printStackTrace();
