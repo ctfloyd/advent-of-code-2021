@@ -10,8 +10,7 @@ public class DayFifteen extends AbstractAdventOfCode {
 
     @Override
     public Object solvePartTwo() throws Exception {
-//        return dijkstra(scaleBoard(read2dBoard("input/day15/data.txt")));
-        return null;
+        return dijkstra(scaleBoard(read2dBoard("input/day15/data.txt")));
     }
 
     private int[][] scaleBoard(int[][] board) {
@@ -37,6 +36,9 @@ public class DayFifteen extends AbstractAdventOfCode {
     private int dijkstra(int[][] board) {
         boolean[][] visited = new boolean[board.length][board[0].length];
         int[][] tentativeDistance = new int[board.length][board[0].length];
+
+        Queue<int[]> nextNodeCandidates = new PriorityQueue<>(100, Comparator.comparingInt(a -> tentativeDistance[a[0]][a[1]]));
+
         for (int[] row : tentativeDistance) {
             Arrays.fill(row, Integer.MAX_VALUE);
         }
@@ -49,22 +51,22 @@ public class DayFifteen extends AbstractAdventOfCode {
                 if (!visited[neighbor[0]][neighbor[1]]) {
                     int distance = tentativeDistance[current[0]][current[1]] + board[neighbor[0]][neighbor[1]];
                     tentativeDistance[neighbor[0]][neighbor[1]] = Math.min(distance, tentativeDistance[neighbor[0]][neighbor[1]]);
+                    nextNodeCandidates.add(neighbor);
                 }
             }
             visited[current[0]][current[1]] = true;
 
-            long now = System.nanoTime();
-            int smallest = Integer.MAX_VALUE;
-            for (int i = 0; i < tentativeDistance.length; i++) {
-                for (int j = 0; j < tentativeDistance[i].length; j++) {
-                    if (tentativeDistance[i][j] < smallest && !visited[i][j]) {
-                        current[0] = i;
-                        current[1] = j;
-                        smallest = tentativeDistance[i][j];
-                    }
+            current = null;
+            while (current == null) {
+                current = nextNodeCandidates.poll();
+                if (current == null) {
+                    break;
+                }
+
+                if (visited[current[0]][current[1]]) {
+                    current = null;
                 }
             }
-            System.out.println("Finding next smallest value took: " + (System.nanoTime() - now));
         }
 
         return tentativeDistance[board.length - 1][board[0].length - 1];
